@@ -1,8 +1,8 @@
 {
     "id": "d8",
-    "host": "d8.dev",
+    "host": "d8.local",
     "aliases": [
-        "www.d8.dev",
-        "d8-test.dev"
+        "www.d8.local",
+        "d8-test.local"
     ]
 }
