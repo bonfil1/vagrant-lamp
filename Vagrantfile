@@ -36,20 +36,29 @@ Vagrant.configure("2") do |config|
   # Forward http port on 8025, used for connecting web browsers to MailHog
   config.vm.network :forwarded_port, guest: 8025, host: 8025
 
+  # Backup databases before destroy or halt
+  if Vagrant.has_plugin? 'vagrant-triggers'
+    config.trigger.before :destroy do
+        info "Dumping the database before destroying the VM..."
+        run "rm -Rf /vagrant/backup/*"
+        run_remote "bash /vagrant/sh/d8.sh"
+    end
+  end
+
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
   config.vm.network :private_network, ip: "192.168.33.10"
 
   # Set share folder permissions to 777 so that apache can write files
-  config.vm.synced_folder ".", "/vagrant", nfs => { :mount_options => ['dmode=777','fmode=666'] }
+  config.vm.synced_folder ".", "/vagrant", mount_options: ['dmode=777','fmode=666']
 
   # Provider-specific configuration so you can fine-tune VirtualBox for Vagrant.
   # These expose provider-specific options.
   config.vm.provider :virtualbox do |vb|
     # Use VBoxManage to customize the VM.
     # For example to change memory or number of CPUs:
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
-    vb.customize ["modifyvm", :id, "--cpus", "2"]
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--cpus", "1"]
   end
 
   # Enable provisioning with chef zero, specifying a cookbooks path, roles
