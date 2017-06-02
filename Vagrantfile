@@ -36,6 +36,15 @@ Vagrant.configure("2") do |config|
   # Forward http port on 8025, used for connecting web browsers to MailHog
   config.vm.network :forwarded_port, guest: 8025, host: 8025
 
+  # Backup databases before destroy or halt
+  if Vagrant.has_plugin? 'vagrant-triggers'
+    config.trigger.before :destroy do
+        info "Dumping the database before destroying the VM..."
+        run "rm -Rf /vagrant/backup/*"
+        run_remote "bash /vagrant/sh/d8.sh"
+    end
+  end
+
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
   config.vm.network :private_network, ip: "192.168.33.10"
