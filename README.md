@@ -21,6 +21,12 @@ Download and install [vagrant](http://vagrantup.com/)
 Install [vagrant-omnibus](https://github.com/chef/vagrant-omnibus) plugin
 
     $ vagrant plugin install vagrant-omnibus
+    
+Install other plugins (Optional)
+
+    $ vagrant plugin install vagrant-berkshelf
+    
+    $ vagrant plugin install vagrant-triggers
 
 Clone this repository
 
